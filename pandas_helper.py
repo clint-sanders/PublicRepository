@@ -63,7 +63,6 @@ def trimRowWidth(temp_data_frame, max_col_width):
             if len(temp_data_frame[row][col]) > max_col_width:
                 temp_data_frame[row][col] = temp_data_frame[row][col][0:max_col_width] + dotdotdot
 
-
 def getFormattedVal(val, dtype, float_precision):
     # Format based on type. Float has precision, strings have quotes
     if (str(dtype).lower()[:3] == "int"):
