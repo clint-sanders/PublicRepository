@@ -10,3 +10,19 @@
 * suffix - like prefix, but the suffix.
 
 Non-numerical columns will be surrounded by quotations marks "like so" - useful for seeing possible leading and trailing white-space.
+Example usage:
+
+code: 
+
+#use census data of state name, population and income  
+census = census[["state", "totalpop", "income"]]  
+#n is list of first row and last row. Float precision is to one decimal  
+printPandaHead(census, n=[0,1,census.shape[0]-1], float_precision=1)  
+
+output of call:
+
+`| state       | totalpop | income `  
+`| object      | int64    | float64`  
+`| "Alabama"   | 4830620  | 43296.4`  
+`| "Wisconsin" | 5742117  | 53898.9`  
+`Printed 2 rows out of 51`  
