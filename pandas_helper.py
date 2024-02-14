@@ -3,40 +3,27 @@ import pandas as pd
 # print columns, datatype, then rows of dataframe. "n" can be a list of integers that index the rows of the dataframe
 def printPandaHead(df, n=5, max_col_width=0, float_precision=5, prefix="| ", suffix=" "):
     temp_data_frame = []
+    #n is a list of row numbers. A single int should be interpreted as printing the first n rows.
     if isinstance(n, int):
         n = range(n)
-
     # put column names in temp_data_frame to print out
-    temp_row = []  # reset temp row
-    for col in df.columns:
-        temp_row.append(col)
-    temp_data_frame.append(temp_row)
-
+    temp_data_frame.append(df.columns)
     # put column types in temp_data_frame to print out
-    temp_row = []  # reset temp row
-    for col in df.columns:
-        temp_row.append(str(df[col].dtype))
-    temp_data_frame.append(temp_row)
-
-    # Count number of printed rows. quit when it reaches "n" number of rows
+    temp_data_frame.append([str(df[col].dtype) for col in df.columns])
+    # Count number of printed rows.
     rows_printed = 0
     for i in n:
         # i index must be inside dataframe
         if i < 0 or i >= df.shape[0]:
             break
-
         rows = df.iloc[i]
-
-        temp_row = []
-        for col in df.columns:
-            temp_row.append(getFormattedVal(rows[col], df[col].dtype, float_precision))
-        temp_data_frame.append(temp_row)
+        temp_data_frame.append([getFormattedVal(rows[col], df[col].dtype, float_precision) for col in df.columns])
         rows_printed += 1
-
+    #if a max_col_width is given, trim to that width
     if (max_col_width > 0):
-        trimRowLength(temp_data_frame, max_col_width)
-
-    maxlength_in_col = getMaxLenInCol(temp_data_frame)
+        trimRowWidth(temp_data_frame, max_col_width)
+    #Find the width of the longest string in each column to align them vertically
+    maxlength_in_col = getMaxWidthInCol(temp_data_frame)
     for row in temp_data_frame:
         printRow(row, maxlength_in_col, prefix, suffix)
 
@@ -49,8 +36,8 @@ def printRow(list, maxlength_in_col, prefix, suffix):
 
     str_to_print = ""
     for i in range(len(list)):
-        col_str = list[i]
         str_to_print += prefix
+        col_str = list[i]
         num_spaces = maxlength_in_col[i] - len(col_str)
         str_to_print += col_str
         for j in range(num_spaces):
@@ -59,7 +46,7 @@ def printRow(list, maxlength_in_col, prefix, suffix):
     print(str_to_print)
 
 
-def getMaxLenInCol(dataframe):
+def getMaxWidthInCol(dataframe):
     rval = [0] * len(dataframe[0])  # list of zeros for every column
     for row in dataframe:
         for i in range(len(row)):
@@ -68,7 +55,8 @@ def getMaxLenInCol(dataframe):
     return rval
 
 
-def trimRowLength(temp_data_frame, max_col_width):
+def trimRowWidth(temp_data_frame, max_col_width):
+    #dotdotdot adds to width, but gives visual indicator that the row was truncated
     dotdotdot = "..."
     for row in range(len(temp_data_frame)):
         for col in range(len(temp_data_frame[row])):
