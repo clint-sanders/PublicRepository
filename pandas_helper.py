@@ -21,7 +21,7 @@ def printPandaHead(df, n=5, max_col_width=0, float_precision=5, prefix="| ", suf
         rows_printed += 1
     #if a max_col_width is given, trim to that width
     if (max_col_width > 0):
-        trimRowWidth(temp_data_frame, max_col_width)
+        trimColWidth(temp_data_frame, max_col_width)
     #Find the width of the longest string in each column to align them vertically
     maxlength_in_col = getMaxWidthInCol(temp_data_frame)
     for row in temp_data_frame:
@@ -55,7 +55,7 @@ def getMaxWidthInCol(dataframe):
     return rval
 
 
-def trimRowWidth(temp_data_frame, max_col_width):
+def trimColWidth(temp_data_frame, max_col_width):
     #dotdotdot adds to width, but gives visual indicator that the row was truncated
     dotdotdot = "..."
     for row in range(len(temp_data_frame)):
